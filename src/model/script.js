@@ -19,9 +19,11 @@ canvas.width = 1280
 canvas.height = 640
 
 //Constantes de configuração (referência)
+const playerWidth = 75
+const playerHeight = 150
 const ground = canvas.height - 50
 const leftSide = 50;
-const rightSide = canvas.width - 50;
+const rightSide = canvas.width - playerWidth - 50;
 const gravity = 0.4;
 const heightJump = canvas.height * 0.5
 const xSpeed = 10
@@ -31,16 +33,16 @@ screen.fillRect(0, 0, canvas.width, canvas.height);
 
 //Classe de players
 class Sprite {
-    constructor (width, height, position, speed, color) {
+    constructor (position, speed, color) {
         this.position = position
-        this.width = width
-        this.height = height    
+        this.width = playerWidth
+        this.height = playerHeight    
         this.speed = speed
         this.color = color
         this.isJumping = false
     }
 
-    //Desenho de platers
+    //Desenho de players
     draw() {
         screen.fillStyle = this.color
         screen.fillRect(this.position.x, this.position.y, this.width, this.height)
@@ -143,8 +145,8 @@ function animation(){
 }
 
 //Instanciando players
-player1 = new Sprite(50, 100, {x: leftSide, y: ground}, {x: 0, y: 0}, 'red', false);
-player2 = new Sprite(50, 100, {x: rightSide, y: ground}, {x: 0, y: 0}, 'blue', false);
+player1 = new Sprite({x: leftSide, y: ground}, {x: 0, y: 0}, 'red', false);
+player2 = new Sprite({x: rightSide, y: ground}, {x: 0, y: 0}, 'blue', false);
 
 //Desenhando players
 player1.draw();
