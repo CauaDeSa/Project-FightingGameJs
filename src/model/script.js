@@ -81,13 +81,15 @@ function animation(){
     if(keys.w && !player1.isJumping) {
         player1.speed.y = -10
     } else if(keys.s) {
-        player1.speed.y = 7
+        if (player1.isJumping) {
+            player1.speed.y = 7
+        }
     }
 
     //Verificando se o player1 está pulando ou não
     if (player1.position.y <= heightJump) {
         player1.isJumping = true
-    } else if (player1.position.y + player1.height > ground) {
+    } else if ((player1.position.y + player1.height + player1.speed.y) >= ground) {
         player1.isJumping = false
         player1.position.y = ground - player1.height
     }
@@ -110,13 +112,15 @@ function animation(){
     if(keys.ArrowUp && !player2.isJumping) {
         player2.speed.y = -10
     } else if(keys.ArrowDown) {
-        player2.speed.y = xSpeed
+        if (player2.isJumping) {
+            player2.speed.y = xSpeed
+        }
     }
 
     //Verificando se o player2 está pulando ou não
     if (player2.position.y <= heightJump) {
         player2.isJumping = true
-    } else if (player2.position.y + player2.height > ground) {
+    } else if (player2.position.y + player2.height >= ground) {
         player2.isJumping = false
         player2.position.y = ground - player2.height
     }
