@@ -3,11 +3,13 @@ const screen = canvas.getContext('2d');
 
 //Variáveis de movimentação
 const keys = {
+    //Player 1
     w: false,
     a: false,
     s: false,
     d: false,
 
+    //Player 2
     ArrowUp: false,
     ArrowLeft: false,
     ArrowDown: false,
@@ -46,6 +48,7 @@ class Sprite {
             rangeX: playerWidth * 2,
             rangeY: playerHeight / 2
         }
+        this.isAttacking = false
     }
 
     //Desenho de players
@@ -54,6 +57,7 @@ class Sprite {
         screen.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //hitbox da arma atual
+        if (this.isAttacking)
         if (this.lastKey === 'd' || this.lastKey === 'ArrowRight')
             screen.fillRect(this.weapon.position.x, this.weapon.position.y, this.weapon.rangeX, this.weapon.rangeY);
         else if (this.lastKey === 'a' || this.lastKey === 'ArrowLeft')
@@ -77,6 +81,32 @@ class Sprite {
             this.speed.y = 0
         }
     }    
+
+    //Ataque
+    attack() {
+        this.isAttacking = true
+
+        setTimeout(() => {
+            this.isAttacking = false
+        }, 1000)
+    }
+}
+
+function hitCollision({ atacker, atacked }) {
+    //Verificando se o ataque acertou o player
+    return (
+        //Se ataque vem da esquerda
+        (atacker.lastKey === 'd' && atacker.position.x + atacker.weapon.rangeX >= atacked.position.x &&
+        atacker.position.x <= atacked.position.x &&
+        atacker.weapon.position.y + atacker.weapon.rangeY >= atacked.position.y &&
+        atacker.weapon.position.y <= atacked.position.y) 
+            ||
+        //Se ataque vem da direita
+        (atacker.lastKey === 'a' && atacker.position.x - atacker.weapon.rangeX <= atacked.position.x &&
+        atacker.position.x >= atacked.position.x &&
+        atacker.weapon.position.y + atacker.weapon.rangeY >= atacked.position.y &&
+        atacker.weapon.position.y <= atacked.position.y)
+    )
 }
 
 function animation(){
@@ -123,7 +153,14 @@ function animation(){
     if (player1.position.x > rightSide) 
     player1.position.x = rightSide
 
-    console.log(player1.lastKey, player1.speed.x)
+    //Ataque player 1
+    if ( hitCollision( {
+        atacker: player1,
+        atacked: player2
+    }) && player1.isAttacking) {
+        player1.isAttacking = false
+        console.log('acertou')
+    }
 
     //Movimentação vertical player 2
     if(keys.ArrowUp && !player2.isJumping) {
@@ -193,6 +230,21 @@ window.addEventListener('keydown', (e) => {
         player1.lastKey = 'd'
     }
 
+    //Ataque player 1 simples
+    if (e.key == 'c'){
+        player1.attack()
+    }
+
+    //Ataque player 1 especial
+    // if (e.key == 'v'){
+    //     player1.attack2()
+    // }
+
+    // Carregando ataque player 1
+    // if (e.key == 'b'){
+    //     player1.isCharging = true
+    // }
+
     //Player 2
     if(e.key == 'ArrowUp') {
         keys.ArrowUp = true
@@ -211,6 +263,21 @@ window.addEventListener('keydown', (e) => {
         keys.ArrowRight = true
         player2.lastKey = 'ArrowRight'
     }
+
+    //Ataque player 2 simples
+    if (e.key == ','){
+        player2.attack()
+    }
+
+    //Ataque player 2 especial
+    // if (e.key == '.'){
+    //     player2.attack2()
+    // }
+
+    // Carregando ataque player 2
+    // if (e.key == ';'){
+    //     player2.isCharging = true
+    // }
 })
 
 //Parando movimentação dos players
