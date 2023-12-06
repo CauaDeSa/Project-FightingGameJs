@@ -35,7 +35,7 @@ screen.fillRect(0, 0, canvas.width, canvas.height);
 
 //Classe de players
 class Sprite {
-    constructor(position, speed, color) {
+    constructor(position, speed, color, health) {
         this.position = position
         this.width = playerWidth
         this.height = playerHeight
@@ -43,10 +43,13 @@ class Sprite {
         this.color = color
         this.isJumping = false
         this.lastKey = false
+        this.health = health
         this.weapon = {
+            //Valores default
             position: this.position,
             rangeX: playerWidth * 2,
-            rangeY: playerHeight / 2
+            rangeY: playerHeight / 2,
+            damage: 10
         }
         this.isAttacking = false
     }
@@ -159,7 +162,8 @@ function animation() {
         atacked: player2
     }) && player1.isAttacking) {
         player1.isAttacking = false
-        console.log('acertou')
+        document.querySelector('#player2HealthBar').style = ('width: ' + (player2.health - player1.weapon.damage) + '%');
+        console.log(player2.health, player1.weapon.damage, 'width: ' + (player2.health += -player1.weapon.damage) + '%')
     }
 
     //Movimentação vertical player 2
@@ -207,8 +211,8 @@ function animation() {
 }
 
 //Instanciando players
-player1 = new Sprite({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', false);
-player2 = new Sprite({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', false);
+player1 = new Sprite({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100);
+player2 = new Sprite({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100);
 
 //Desenhando players
 player1.draw();
