@@ -86,15 +86,15 @@ function animation(){
         }
     }
 
-    //Verificando se o player1 está pulando ou não
+    //Verificando se o player1 está pulando ou se está no chão
     if (player1.position.y <= heightJump) {
         player1.isJumping = true
-    } else if ((player1.position.y + player1.height + player1.speed.y) >= ground) {
+    } else if ((player1.position.y + player1.height + player1.speed.y) > ground) {
         player1.isJumping = false
+        player1.speed.y = 0
         player1.position.y = ground - player1.height
+        console.log(player1.position.y + playerHeight + player1.speed.y, player1.speed.y, ground)
     }
-
-    console.log("heightJmp: " + heightJump, "canvasH *: " + canvas.height * 0.5, "CanvasH: " + canvas.height)
 
     if(keys.a) {
         player1.speed.x = -xSpeed
@@ -117,11 +117,12 @@ function animation(){
         }
     }
 
-    //Verificando se o player2 está pulando ou não
+    //Verificando se o player2 está pulando ou se está no chão
     if (player2.position.y <= heightJump) {
         player2.isJumping = true
-    } else if (player2.position.y + player2.height >= ground) {
+    } else if (player2.position.y + player2.height + player2.speed.y > ground) {
         player2.isJumping = false
+        player2.speed.y = 0
         player2.position.y = ground - player2.height
     }
 
