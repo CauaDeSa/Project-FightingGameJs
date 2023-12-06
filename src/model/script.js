@@ -40,12 +40,21 @@ class Sprite {
         this.speed = speed
         this.color = color
         this.isJumping = false
+        this.lastKey = false
+        this.weapon = {
+            position: this.position,
+            rangeX: playerWidth * 2,
+            rangeY: playerHeight / 2
+        }
     }
 
     //Desenho de players
     draw() {
         screen.fillStyle = this.color
         screen.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+        //hitbox da arma atual
+        screen.fillRect(this.weapon.position.x, this.weapon.position.y, this.weapon.rangeX, this.weapon.rangeY);
     }
 
     //Atualização de frame
@@ -93,20 +102,23 @@ function animation(){
         player1.isJumping = false
         player1.speed.y = 0
         player1.position.y = ground - player1.height
-        console.log(player1.position.y + playerHeight + player1.speed.y, player1.speed.y, ground)
     }
 
-    if(keys.a) {
+    if(keys.a && player1.lastKey === 'a') {
         player1.speed.x = -xSpeed
-        if (player1.position.x < leftSide) 
-            player1.position.x = leftSide
-    } else if(keys.d) {
+    } else if(keys.d && player1.lastKey === 'd') {
         player1.speed.x = xSpeed
-        if (player1.position.x > rightSide) 
-            player1.position.x = rightSide
     } else {
         player1.speed.x = 0
     }
+
+    if (player1.position.x < leftSide) 
+    player1.position.x = leftSide
+
+    if (player1.position.x > rightSide) 
+    player1.position.x = rightSide
+
+    console.log(player1.lastKey, player1.speed.x)
 
     //Movimentação player 2
     if(keys.ArrowUp && !player2.isJumping) {
@@ -126,27 +138,19 @@ function animation(){
         player2.position.y = ground - player2.height
     }
 
-    if(keys.ArrowLeft) {
+    if(keys.ArrowLeft && player2.lastKey === 'ArrowLeft') {
         player2.speed.x = -xSpeed
-        if (player2.position.x < leftSide) 
-            player2.position.x = leftSide
-    } else if(keys.ArrowRight) {
+    } else if(keys.ArrowRight && player2.lastKey === 'ArrowRight') {
         player2.speed.x = xSpeed
-        if (player2.position.x > rightSide) 
-            player2.position.x = rightSide
     } else {
         player2.speed.x = 0
     }
-
-    if(keys.a) {
-        player1.speed.x = -xSpeed
-        
-    } else if(keys.d) {
-        player1.speed.x = xSpeed
-        
-    } else {
-        player1.speed.x = 0
-    }
+    
+    if (player2.position.x < leftSide) 
+            player2.position.x = leftSide
+    
+    if (player2.position.x > rightSide) 
+        player2.position.x = rightSide
 }
 
 //Instanciando players
@@ -168,8 +172,9 @@ window.addEventListener('keydown', (e) => {
         keys.w = true
     }
 
-    if(e.key == 'a') {
+    if(e.key == 'a') {  
         keys.a = true
+        player1.lastKey = 'a' 
     }
 
     if(e.key == 's') {
@@ -178,6 +183,7 @@ window.addEventListener('keydown', (e) => {
 
     if(e.key == 'd'){
         keys.d = true
+        player1.lastKey = 'd'
     }
 
     //Player 2
@@ -187,6 +193,7 @@ window.addEventListener('keydown', (e) => {
 
     if(e.key == 'ArrowLeft'){
         keys.ArrowLeft = true
+        player2.lastKey = 'ArrowLeft'
     }
 
     if(e.key == 'ArrowDown'){
@@ -195,6 +202,7 @@ window.addEventListener('keydown', (e) => {
 
     if(e.key == 'ArrowRight'){
         keys.ArrowRight = true
+        player2.lastKey = 'ArrowRight'
     }
 })
 
