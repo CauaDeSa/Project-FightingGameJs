@@ -86,13 +86,22 @@ function animation(){
     player1.update()
     player2.update()
 
-    //Movimentação player 1
+    //Movimentação vertical player 1
     if(keys.w && !player1.isJumping) {
         player1.speed.y = -10
     } else if(keys.s) {
         if (player1.isJumping) {
             player1.speed.y = 7
         }
+    }
+
+    //Movimentação horizontal do player 1
+    if(keys.a && player1.lastKey === 'a') {
+        player1.speed.x = -xSpeed
+    } else if(keys.d && player1.lastKey === 'd') {
+        player1.speed.x = xSpeed
+    } else {
+        player1.speed.x = 0
     }
 
     //Verificando se o player1 está pulando ou se está no chão
@@ -104,14 +113,7 @@ function animation(){
         player1.position.y = ground - player1.height
     }
 
-    if(keys.a && player1.lastKey === 'a') {
-        player1.speed.x = -xSpeed
-    } else if(keys.d && player1.lastKey === 'd') {
-        player1.speed.x = xSpeed
-    } else {
-        player1.speed.x = 0
-    }
-
+    //Verificando se o player1 está dentro do canvas
     if (player1.position.x < leftSide) 
     player1.position.x = leftSide
 
@@ -120,13 +122,22 @@ function animation(){
 
     console.log(player1.lastKey, player1.speed.x)
 
-    //Movimentação player 2
+    //Movimentação vertical player 2
     if(keys.ArrowUp && !player2.isJumping) {
         player2.speed.y = -10
     } else if(keys.ArrowDown) {
         if (player2.isJumping) {
             player2.speed.y = xSpeed
         }
+    }
+
+    //Movimentação horizontal do player 2
+    if(keys.ArrowLeft && player2.lastKey === 'ArrowLeft') {
+        player2.speed.x = -xSpeed
+    } else if(keys.ArrowRight && player2.lastKey === 'ArrowRight') {
+        player2.speed.x = xSpeed
+    } else {
+        player2.speed.x = 0
     }
 
     //Verificando se o player2 está pulando ou se está no chão
@@ -137,15 +148,8 @@ function animation(){
         player2.speed.y = 0
         player2.position.y = ground - player2.height
     }
-
-    if(keys.ArrowLeft && player2.lastKey === 'ArrowLeft') {
-        player2.speed.x = -xSpeed
-    } else if(keys.ArrowRight && player2.lastKey === 'ArrowRight') {
-        player2.speed.x = xSpeed
-    } else {
-        player2.speed.x = 0
-    }
     
+    //Verificando se o player2 está dentro do canvas
     if (player2.position.x < leftSide) 
             player2.position.x = leftSide
     
