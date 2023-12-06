@@ -54,7 +54,10 @@ class Sprite {
         screen.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //hitbox da arma atual
-        screen.fillRect(this.weapon.position.x, this.weapon.position.y, this.weapon.rangeX, this.weapon.rangeY);
+        if (this.lastKey === 'd' || this.lastKey === 'ArrowRight')
+            screen.fillRect(this.weapon.position.x, this.weapon.position.y, this.weapon.rangeX, this.weapon.rangeY);
+        else if (this.lastKey === 'a' || this.lastKey === 'ArrowLeft')
+            screen.fillRect(this.weapon.position.x + this.width, this.weapon.position.y, -this.weapon.rangeX, this.weapon.rangeY);
     }
 
     //Atualização de frame
