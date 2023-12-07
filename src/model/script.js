@@ -117,6 +117,18 @@ function hitCollision({ atacker, atacked }) {
     )
 }
 
+timer = 300
+
+function setTimer () {
+    setTimeout(setTimer, 1000)
+    if (timer >= 0){
+        timer--
+        document.querySelector("#timer").innerHTML = timer
+    }
+
+    console.log(timer)
+}
+
 function animation() {
     //Looping de frames
     if (!haveAWinner.win){
@@ -124,8 +136,6 @@ function animation() {
     } else if (haveAWinner.win){
         console.log(haveAWinner.winner)
     }
-
-    console.log(player1.canAttack, player2.canAttack)
 
     screen.fillStyle = 'black'
     screen.fillRect(0, 0, canvas.width, canvas.height)
@@ -141,7 +151,7 @@ function animation() {
         if (player1.isJumping) {
             player1.speed.y = 7
         }
-    }
+    }   
 
     //Movimentação horizontal do player 1
     if (keys.a && player1.lastKey === 'a') {
@@ -177,7 +187,6 @@ function animation() {
 
         if (player2.health > 0){
             document.querySelector('#player2HealthBar').style = ('width: ' + (player2.health - player1.weapon.damage) + '%');
-            console.log(player2.health, player1.weapon.damage, 'width: ' + (player2.health += -player1.weapon.damage) + '%')
         }
         if (player2.health <= 0) {
             haveAWinner.win = true
@@ -225,7 +234,6 @@ function animation() {
         atacked: player1
     }) && player2.isAttacking) {
         player2.isAttacking = false
-        console.log('acertou')
     
         if (player1.health > 0){
             document.querySelector('#player1HealthBar').style = ('width: ' + (player1.health -= player2.weapon.damage) + '%');
@@ -247,6 +255,9 @@ player2.draw();
 
 //Movimentando players
 animation();
+
+//Atualizando timer
+setTimer()
 
 //Mapeando teclas de movimentação
 window.addEventListener('keydown', (e) => {
