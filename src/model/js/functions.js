@@ -22,7 +22,6 @@ function setTimer () {
     if (timer > 0 && !haveAWinner.win){
         timer--
         document.querySelector("#timer").innerHTML = timer
-        console.log(player1.health, player2.health)
     } else if (player1.health == player2.health) {
         haveAWinner.win = true
         haveAWinner.winner = 'draw'
@@ -33,8 +32,6 @@ function setTimer () {
         haveAWinner.win = true
         haveAWinner.winner = 'player 2'
     }
-
-    console.log(timer)
 }
 
 function animation() {
@@ -49,6 +46,7 @@ function animation() {
     screen.fillRect(0, 0, canvas.width, canvas.height)
 
     //Atualização de frame
+    background.update()
     player1.update()
     player2.update()
 
@@ -154,7 +152,7 @@ function animation() {
 }
 
 //Movimentando players
-animation();
+animation()
 
 //Atualizando timer
 setTimer()

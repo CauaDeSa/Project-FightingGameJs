@@ -36,8 +36,17 @@ screen.fillRect(0, 0, canvas.width, canvas.height);
 
 
 //Instanciando players
-player1 = new Player({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100);
-player2 = new Player({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100);
+const player1 = new Player({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100);
+const player2 = new Player({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100);
+
+//Instanciando background
+const background = new Sprite({
+    position: { x: 0, y: 0 },
+    imageSrc: "../../assets/background.webp"
+});
+
+//Desenhando background
+background.draw();
 
 //Desenhando players
 player1.draw();
