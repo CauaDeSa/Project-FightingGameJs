@@ -36,8 +36,68 @@ screen.fillRect(0, 0, canvas.width, canvas.height);
 
 
 //Instanciando players
-const player1 = new Player({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100, "../../assets/Martial Hero 2/Sprites/Idle.png", 2, 4, 8, {x: 100, y: 135});
-const player2 = new Player({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100, "../../assets/Medieval King Pack 2/Sprites/Idle.png", 2, 8, 8, {x: 215, y: 90});
+const player1 = new Player({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100, "../../assets/Martial Hero 2/Sprites/Idle.png", 2, 4, 8, {x: 100, y: 135}, 
+    { 
+        default: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Idle.png",
+            frameMax: 4,
+        },
+        run: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Run.png",
+            frameMax: 9,
+        },
+        jump: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Jump.png",
+            frameMax: 2,
+        },
+        fall: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Fall.png",
+            frameMax: 2,
+        },
+        attack: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Attack1.png",
+            frameMax: 4,
+        },
+        die: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Death.png",
+            frameMax: 7,
+        },
+        hurt: {
+            imageSrc: "../../assets/Martial Hero 2/Sprites/Take hit.png",
+            frameMax: 3,
+        },
+    });
+const player2 = new Player({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100, "../../assets/Medieval King Pack 2/Sprites/Idle.png", 2, 8, 8, {x: 215, y: 90},
+{
+    default: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Idle.png",
+        frameMax: 8,
+    },
+    run: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Run.png",
+        frameMax: 8,
+    },
+    jump: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Jump.png",
+        frameMax: 2,
+    },
+    fall: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Fall.png",
+        frameMax: 2,
+    },
+    attack: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Attack1.png",
+        frameMax: 8,
+    },
+    die: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Death.png",
+        frameMax: 8,
+    },
+    hurt: {
+        imageSrc: "../../assets/Medieval King Pack 2/Sprites/Take hit.png",
+        frameMax: 3,
+    },
+});
 
 //Instanciando background
 const background = new Sprite({

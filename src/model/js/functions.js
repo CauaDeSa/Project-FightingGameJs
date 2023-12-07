@@ -2,13 +2,13 @@ function hitCollision({ atacker, atacked }) {
     //Verificando se o ataque acertou o player
     return (
         //Se ataque vem da esquerda
-        ((atacker.lastKey === 'd' || atacker.lastKey === 'ArrowRight') && atacker.position.x + atacker.weapon.rangeX >= atacked.position.x &&
+        ((atacker.lastKey === 'a' || atacker.lastKey === 'ArrowRight') && atacker.position.x + atacker.weapon.rangeX >= atacked.position.x &&
             atacker.position.x <= atacked.position.x &&
             atacker.weapon.position.y + atacker.weapon.rangeY >= atacked.position.y &&
             atacker.weapon.position.y <= atacked.position.y)
         ||
         //Se ataque vem da direita
-        ((atacker.lastKey === 'a' || atacker.lastKey === 'ArrowLeft') && atacker.position.x - atacker.weapon.rangeX <= atacked.position.x &&
+        ((atacker.lastKey === 'd' || atacker.lastKey === 'ArrowLeft') && atacker.position.x - atacker.weapon.rangeX <= atacked.position.x &&
             atacker.position.x >= atacked.position.x &&
             atacker.weapon.position.y + atacker.weapon.rangeY >= atacked.position.y &&
             atacker.weapon.position.y <= atacked.position.y)
@@ -62,19 +62,30 @@ function animation() {
     //Movimentação horizontal do player 1
     if (keys.a && player1.lastKey === 'a') {
         player1.speed.x = -xSpeed
+        player1.switchSprite('run')
     } else if (keys.d && player1.lastKey === 'd') {
         player1.speed.x = xSpeed
+        player1.switchSprite('run')
     } else {
         player1.speed.x = 0
+        player1.switchSprite('default')
     }
 
     //Verificando se o player1 está pulando ou se está no chão
-    if (player1.position.y <= heightJump) {
+    if (player1.speed.y > 0) {
+        player1.switchSprite('fall')
+        console.log(player1.speed.y)
+    console.log(player1.image)
+    } else if (player1.position.y <= heightJump) {
         player1.isJumping = true
+        player1.switchSprite('jump')
+        console.log(player1.speed.y)
+    console.log(player1.image)
     } else if ((player1.position.y + player1.height + player1.speed.y) > ground) {
         player1.isJumping = false
         player1.speed.y = 0
         player1.position.y = ground - player1.height
+        player1.switchSprite('default')
     }
 
     //Verificando se o player1 está dentro do canvas
@@ -112,10 +123,13 @@ function animation() {
     //Movimentação horizontal do player 2
     if (keys.ArrowLeft && player2.lastKey === 'ArrowLeft') {
         player2.speed.x = -xSpeed
+        player2.switchSprite('run')
     } else if (keys.ArrowRight && player2.lastKey === 'ArrowRight') {
         player2.speed.x = xSpeed
+        player2.switchSprite('run')
     } else {
         player2.speed.x = 0
+        player2.switchSprite('default')
     }
 
     //Verificando se o player2 está pulando ou se está no chão
@@ -140,7 +154,7 @@ function animation() {
         atacked: player1
     }) && player2.isAttacking) {
         player2.isAttacking = false
-    
+
         if (player1.health > 0){
             document.querySelector('#player1HealthBar').style = ('width: ' + (player1.health -= player2.weapon.damage) + '%');
         }

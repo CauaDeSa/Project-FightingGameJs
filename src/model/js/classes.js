@@ -1,5 +1,5 @@
 class Sprite {
-    constructor ({ position, imageSrc, scale = 1, frameMax = 1, framesHold, offset = {x: 0, y: 0} }){
+    constructor({ position, imageSrc, scale = 1, frameMax = 1, framesHold, offset = { x: 0, y: 0 } }) {
         this.position = position
         this.image = new Image()
         this.image.src = imageSrc
@@ -11,25 +11,25 @@ class Sprite {
         this.offset = offset
     }
 
-    draw(){
+    draw() {
         screen.drawImage(
-            this.image, 
+            this.image,
             this.framesCurrent * (this.image.width / this.frameMax),
             0,
             this.image.width / this.frameMax,
             this.image.height,
-            this.position.x - this.offset.x, 
-            this.position.y - this.offset.y, 
-            (this.image.width / this.frameMax) * this.scale, 
+            this.position.x - this.offset.x,
+            this.position.y - this.offset.y,
+            (this.image.width / this.frameMax) * this.scale,
             this.image.height * this.scale
         )
     }
 
-    animateFrame(){
+    animateFrame() {
         this.framesElapsed++
 
-        if (this.framesElapsed % this.framesHold === 0){
-            if (this.framesCurrent < this.frameMax -1) {
+        if (this.framesElapsed % this.framesHold === 0) {
+            if (this.framesCurrent < this.frameMax - 2) {
                 this.framesCurrent++
             } else {
                 this.framesCurrent = 0
@@ -37,16 +37,16 @@ class Sprite {
         }
     }
 
-    update(){
+    update() {
         this.draw()
         this.animateFrame()
     }
 }
 
 //Classe de players
-class Player extends Sprite{
-    constructor(position, speed, color, health, imageSrc, scale, frameMax, framesHold, offset) {
-        super({position, imageSrc, scale, frameMax, framesHold, offset})
+class Player extends Sprite {
+    constructor(position, speed, color, health, imageSrc, scale, frameMax, framesHold, offset, sprites) {
+        super({ position, imageSrc, scale, frameMax, framesHold, offset })
         this.position = position
         this.width = playerWidth
         this.height = playerHeight
@@ -56,6 +56,7 @@ class Player extends Sprite{
         this.lastKey = false
         this.health = health
         this.isDead = false
+        this.sprites = sprites
         this.weapon = {
             //Valores default
             position: this.position,
@@ -66,8 +67,47 @@ class Player extends Sprite{
         }
         this.isAttacking = false
         this.canAttack = true
+
     }
-    
+
+    switchSprite(sprite = "default") {
+        switch (sprite) {
+            case "default":
+                if (this.image !== this.sprites.default.imageSrc)
+                this.image.src = this.sprites.default.imageSrc
+                this.frameMax = this.sprites.default.frameMax
+                break;
+            case "run":
+                this.image.src = this.sprites.run.imageSrc
+                this.frameMax = this.sprites.run.frameMax
+                break;
+            case "jump":
+                this.image.src = this.sprites.jump.imageSrc
+                this.frameMax = this.sprites.jump.frameMax
+                break;
+            case "fall":
+                this.image.src = this.sprites.fall.imageSrc
+                this.frameMax = this.sprites.fall.frameMax
+                break;
+            case "attack":
+                this.image.src = this.sprites.attack.imageSrc
+                this.frameMax = this.sprites.attack.frameMax
+                break;
+            case "die":
+                this.image.src = this.sprites.die.imageSrc
+                this.frameMax = this.sprites.die.frameMax
+                break;
+            case "hurt":
+                this.image.src = this.sprites.hurt.imageSrc
+                this.frameMax = this.sprites.hurt.frameMax
+                break;
+            default:
+                this.image.src = this.sprites.default.imageSrc
+                this.frameMax = this.sprites.default.frameMax
+                break;
+        }
+    }
+
     //Atualização de frame
     update() {
         this.position.x += this.speed.x
@@ -90,24 +130,20 @@ class Player extends Sprite{
 
     //Ataque
     attack() {
-        this.isAttacking = true
-        this.canAttack = false
-        
-        setTimeout(() => {
-            this.canAttack = true
-        }, this.weapon.attackSpeed)
 
-        player1.image = new Image()
-        player1.image.src = "../../assets/Attack1.png"
+        try {
+            if (this.isAttacking) throw new Error('Player já está atacando')
+            if (!this.canAttack) throw new Error('Player não pode atacar ainda')
 
-        let frameIndex = 0;
-        const sprite = document.getElementById('player1');
-        const attackAnimation = setInterval(() => {
-        sprite.style.backgroundPosition = `${frameIndex * -100}px 0px`; // Ajuste o valor -100 com base no tamanho do seu sprite
-        frameIndex++;
-        if (frameIndex > 7) { // Ajuste o valor 7 com base no número de frames no seu sprite
-            frameIndex = 0;
+            this.isAttacking = true
+            this.canAttack = false
+
+            setTimeout(() => {
+                this.canAttack = true
+            }, this.weapon.attackSpeed)
+        } catch (error) {
+            console.error(error)
+            return
         }
-        }, 125)
-    }   
+    }
 }
