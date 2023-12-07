@@ -30,15 +30,17 @@ canvas{
 #player1Status, #player2Status{
     width: 40%;
     height: 40px;
-    border-radius: 100px;
+    border-radius: 10px;
     display: flex;
     flex-wrap: nowrap;
-    border-radius: 100px;
+    border-radius: 20px;
     background-color: #6d6c6c;
+    border: 2px solid black;
 }
 
 #player1Status{
     align-content: end;
+    flex-direction: row-reverse;
 }
 
 #player2Status{
@@ -53,10 +55,14 @@ canvas{
 
 #player1HealthBar{
     background: linear-gradient(90deg, rgba(150,26,26,1) 0%, rgba(255,0,0,1) 100%);
+    transform-origin: right;
+    animation: fill 2s forwards;
 }
 
 #player2HealthBar{
     background: linear-gradient(90deg, rgba(3,142,242,1) 0%, rgba(28,58,128,1) 100%);
+    transform-origin: left;
+    animation: fill 2s forwards;
 }   
 
 #timer{
@@ -71,4 +77,14 @@ canvas{
     justify-content: center;
     border-radius: 30px;
     border: 3px solid rgb(142, 130, 130);
+}
+
+@keyframes pulse {
+    0% { background: linear-gradient(90deg, rgba(150,26,26,1) 0%); }
+    100% { background:  rgba(255,0,0,1) 100%; }
+}
+
+@keyframes fill {
+    0% { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
 }

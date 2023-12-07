@@ -17,18 +17,18 @@ const keys = {
 }
 
 //Configuração do canvas
-canvas.width = 1280
-canvas.height = 640
+canvas.width = 1024
+canvas.height = 576
 
 //Constantes de configuração (referência)
-const playerWidth = 75
-const playerHeight = 150
-const ground = canvas.height - 50
+const playerWidth = 60
+const playerHeight = 120
+const ground = canvas.height - 95
 const leftSide = 50;
 const rightSide = canvas.width - playerWidth - 50;
-const gravity = 0.4;
+const gravity = 0.6;
 const heightJump = canvas.height * 0.5
-const xSpeed = 10
+const xSpeed = 8
 const haveAWinner = {win: false, winner: ''}
 
 //Desenho de fundo

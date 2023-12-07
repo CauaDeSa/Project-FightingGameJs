@@ -61,6 +61,19 @@ class Player {
         setTimeout(() => {
             this.canAttack = true
         }, this.weapon.attackSpeed)
+
+        player1.image = new Image()
+        player1.image.src = "../../assets/Attack1.png"
+
+        let frameIndex = 0;
+        const sprite = document.getElementById('player1');
+        const attackAnimation = setInterval(() => {
+        sprite.style.backgroundPosition = `${frameIndex * -100}px 0px`; // Ajuste o valor -100 com base no tamanho do seu sprite
+        frameIndex++;
+        if (frameIndex > 7) { // Ajuste o valor 7 com base no número de frames no seu sprite
+            frameIndex = 0;
+        }
+        }, 125)
     }   
 }
 
