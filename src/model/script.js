@@ -121,9 +121,19 @@ timer = 300
 
 function setTimer () {
     setTimeout(setTimer, 1000)
-    if (timer >= 0){
+    if (timer > 0 && !haveAWinner.win){
         timer--
         document.querySelector("#timer").innerHTML = timer
+        console.log(player1.health, player2.health)
+    } else if (player1.health == player2.health) {
+        haveAWinner.win = true
+        haveAWinner.winner = 'draw'
+    } else if (player1.health > player2.health) {
+        haveAWinner.win = true
+        haveAWinner.winner = 'player 1'
+    } else if (player1.health < player2.health) {
+        haveAWinner.win = true
+        haveAWinner.winner = 'player 2'
     }
 
     console.log(timer)
@@ -186,7 +196,7 @@ function animation() {
         player1.isAttacking = false 
 
         if (player2.health > 0){
-            document.querySelector('#player2HealthBar').style = ('width: ' + (player2.health - player1.weapon.damage) + '%');
+            document.querySelector('#player2HealthBar').style = ('width: ' + (player2.health -= player1.weapon.damage) + '%');
         }
         if (player2.health <= 0) {
             haveAWinner.win = true
