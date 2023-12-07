@@ -36,8 +36,8 @@ screen.fillRect(0, 0, canvas.width, canvas.height);
 
 
 //Instanciando players
-const player1 = new Player({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100);
-const player2 = new Player({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100);
+const player1 = new Player({ x: leftSide, y: ground }, { x: 0, y: 0 }, 'red', 100, "../../assets/Martial Hero 2/Sprites/Idle.png", 2, 4, 8, {x: 100, y: 135});
+const player2 = new Player({ x: rightSide, y: ground }, { x: 0, y: 0 }, 'blue', 100, "../../assets/Medieval King Pack 2/Sprites/Idle.png", 2, 8, 8, {x: 215, y: 90});
 
 //Instanciando background
 const background = new Sprite({

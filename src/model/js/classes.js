@@ -1,6 +1,52 @@
+class Sprite {
+    constructor ({ position, imageSrc, scale = 1, frameMax = 1, framesHold, offset = {x: 0, y: 0} }){
+        this.position = position
+        this.image = new Image()
+        this.image.src = imageSrc
+        this.scale = scale
+        this.frameMax = frameMax
+        this.framesCurrent = 0
+        this.framesElapsed = 0
+        this.framesHold = framesHold
+        this.offset = offset
+    }
+
+    draw(){
+        screen.drawImage(
+            this.image, 
+            this.framesCurrent * (this.image.width / this.frameMax),
+            0,
+            this.image.width / this.frameMax,
+            this.image.height,
+            this.position.x - this.offset.x, 
+            this.position.y - this.offset.y, 
+            (this.image.width / this.frameMax) * this.scale, 
+            this.image.height * this.scale
+        )
+    }
+
+    animateFrame(){
+        this.framesElapsed++
+
+        if (this.framesElapsed % this.framesHold === 0){
+            if (this.framesCurrent < this.frameMax -1) {
+                this.framesCurrent++
+            } else {
+                this.framesCurrent = 0
+            }
+        }
+    }
+
+    update(){
+        this.draw()
+        this.animateFrame()
+    }
+}
+
 //Classe de players
-class Player {
-    constructor(position, speed, color, health) {
+class Player extends Sprite{
+    constructor(position, speed, color, health, imageSrc, scale, frameMax, framesHold, offset) {
+        super({position, imageSrc, scale, frameMax, framesHold, offset})
         this.position = position
         this.width = playerWidth
         this.height = playerHeight
@@ -21,20 +67,7 @@ class Player {
         this.isAttacking = false
         this.canAttack = true
     }
-
-    //Desenho de players
-    draw() {
-        screen.fillStyle = this.color
-        screen.fillRect(this.position.x, this.position.y, this.width, this.height)
-
-        //hitbox da arma atual
-        if (this.isAttacking)
-            if (this.lastKey === 'd' || this.lastKey === 'ArrowRight')
-                screen.fillRect(this.weapon.position.x, this.weapon.position.y, this.weapon.rangeX, this.weapon.rangeY);
-            else if (this.lastKey === 'a' || this.lastKey === 'ArrowLeft')
-                screen.fillRect(this.weapon.position.x + this.width, this.weapon.position.y, -this.weapon.rangeX, this.weapon.rangeY);
-    }
-
+    
     //Atualização de frame
     update() {
         this.position.x += this.speed.x
@@ -42,6 +75,8 @@ class Player {
 
         this.gravity()
         this.draw()
+        this.animateFrame()
+        this.anima
     }
 
     //Gravidade
@@ -75,20 +110,4 @@ class Player {
         }
         }, 125)
     }   
-}
-
-class Sprite {
-    constructor ({ position, imageSrc }){
-        this.position = position
-        this.image = new Image()
-        this.image.src = imageSrc
-    }
-
-    draw(){
-        screen.drawImage(this.image, this.position.x, this.position.y)
-    }
-
-    update(){
-        this.draw()
-    }
 }

@@ -78,11 +78,11 @@ function animation() {
     }
 
     //Verificando se o player1 está dentro do canvas
-    if (player1.position.x < leftSide)
-        player1.position.x = leftSide
+    if (player1.position.x - player1.width * player1.scale <= leftSide)
+        player1.position.x = leftSide + player1.scale * player1.width
 
-    if (player1.position.x > rightSide)
-        player1.position.x = rightSide
+    if (player1.position.x + player1.width * player1.scale >= rightSide)
+        player1.position.x = rightSide - (player1.width * player1.scale)
 
     //Ataque player 1
     if (hitCollision({
