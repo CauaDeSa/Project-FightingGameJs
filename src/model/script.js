@@ -29,6 +29,7 @@ const rightSide = canvas.width - playerWidth - 50;
 const gravity = 0.4;
 const heightJump = canvas.height * 0.5
 const xSpeed = 10
+const haveAWinner = {win: false, winner: ''}
 
 //Desenho de fundo
 screen.fillRect(0, 0, canvas.width, canvas.height);
@@ -44,14 +45,17 @@ class Sprite {
         this.isJumping = false
         this.lastKey = false
         this.health = health
+        this.isDead = false
         this.weapon = {
             //Valores default
             position: this.position,
             rangeX: playerWidth * 2,
             rangeY: playerHeight / 2,
-            damage: 10
+            damage: 10,
+            attackSpeed: 1
         }
         this.isAttacking = false
+        this.canAttack = true
     }
 
     //Desenho de players
@@ -88,24 +92,25 @@ class Sprite {
     //Ataque
     attack() {
         this.isAttacking = true
-
+        this.canAttack = false
+        
         setTimeout(() => {
-            this.isAttacking = false
-        }, 1000)
-    }
+            this.canAttack = true
+        }, this.weapon.attackSpeed)
+    }   
 }
 
 function hitCollision({ atacker, atacked }) {
     //Verificando se o ataque acertou o player
     return (
         //Se ataque vem da esquerda
-        (atacker.lastKey === 'd' && atacker.position.x + atacker.weapon.rangeX >= atacked.position.x &&
+        ((atacker.lastKey === 'd' || atacker.lastKey === 'ArrowRight') && atacker.position.x + atacker.weapon.rangeX >= atacked.position.x &&
             atacker.position.x <= atacked.position.x &&
             atacker.weapon.position.y + atacker.weapon.rangeY >= atacked.position.y &&
             atacker.weapon.position.y <= atacked.position.y)
         ||
         //Se ataque vem da direita
-        (atacker.lastKey === 'a' && atacker.position.x - atacker.weapon.rangeX <= atacked.position.x &&
+        ((atacker.lastKey === 'a' || atacker.lastKey === 'ArrowLeft') && atacker.position.x - atacker.weapon.rangeX <= atacked.position.x &&
             atacker.position.x >= atacked.position.x &&
             atacker.weapon.position.y + atacker.weapon.rangeY >= atacked.position.y &&
             atacker.weapon.position.y <= atacked.position.y)
@@ -114,7 +119,14 @@ function hitCollision({ atacker, atacked }) {
 
 function animation() {
     //Looping de frames
-    window.requestAnimationFrame(animation)
+    if (!haveAWinner.win){
+        window.requestAnimationFrame(animation)
+    } else if (haveAWinner.win){
+        console.log(haveAWinner.winner)
+    }
+
+    console.log(player1.canAttack, player2.canAttack)
+
     screen.fillStyle = 'black'
     screen.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -161,9 +173,16 @@ function animation() {
         atacker: player1,
         atacked: player2
     }) && player1.isAttacking) {
-        player1.isAttacking = false
-        document.querySelector('#player2HealthBar').style = ('width: ' + (player2.health - player1.weapon.damage) + '%');
-        console.log(player2.health, player1.weapon.damage, 'width: ' + (player2.health += -player1.weapon.damage) + '%')
+        player1.isAttacking = false 
+
+        if (player2.health > 0){
+            document.querySelector('#player2HealthBar').style = ('width: ' + (player2.health - player1.weapon.damage) + '%');
+            console.log(player2.health, player1.weapon.damage, 'width: ' + (player2.health += -player1.weapon.damage) + '%')
+        }
+        if (player2.health <= 0) {
+            haveAWinner.win = true
+            haveAWinner.winner = 'player 1'
+        }
     }
 
     //Movimentação vertical player 2
@@ -207,6 +226,14 @@ function animation() {
     }) && player2.isAttacking) {
         player2.isAttacking = false
         console.log('acertou')
+    
+        if (player1.health > 0){
+            document.querySelector('#player1HealthBar').style = ('width: ' + (player1.health -= player2.weapon.damage) + '%');
+        }
+        if (player1.health <= 0) {
+            haveAWinner.win = true
+            haveAWinner.winner = 'player 2'
+        }
     }
 }
 
@@ -245,7 +272,13 @@ window.addEventListener('keydown', (e) => {
 
     //Ataque player 1 simples
     if (e.key == 'c') {
-        player1.attack()
+        if (player1.canAttack){
+            player1.attack()
+        }
+
+        setTimeout(() => {
+            player1.isAttacking = false
+        }, 1000);
     }
 
     //Ataque player 1 especial
@@ -280,6 +313,10 @@ window.addEventListener('keydown', (e) => {
     //Ataque player 2 simples
     if (e.key == ',') {
         player2.attack()
+
+        setTimeout(() => {
+            player2.isAttacking = false
+        }, 1000);
     }
 
     //Ataque player 2 especial
@@ -313,6 +350,10 @@ window.addEventListener('keyup', (e) => {
         keys.d = false
     }
 
+    if (e.key == 'c'){
+        player1.isAttacking = false
+    }
+
     //Player 2
     if (e.key == 'ArrowUp') {
         keys.ArrowUp = false
@@ -328,5 +369,9 @@ window.addEventListener('keyup', (e) => {
 
     if (e.key == 'ArrowRight') {
         keys.ArrowRight = false
+    }
+
+    if (e.key == ','){
+        player2.isAttacking = false
     }
 })
